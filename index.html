@@ -3,8 +3,16 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Tugboat Towing Co.</title>
+
+  <!-- Mobile Web App Meta Tags -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0a1628">
+
   <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -613,6 +621,8 @@
 
       <div class="mobile-action-buttons">
         <div class="action-btn-row">
+          <button id="mobileFullscreen" class="mobile-btn" onclick="toggleFullscreen()"><span
+              class="icon icon-maximize"></span></button>
           <button id="mobileRefuel" class="mobile-btn"><span class="icon icon-fuel"></span></button>
           <button id="mobileRepair" class="mobile-btn"><span class="icon icon-repair"></span></button>
         </div>
@@ -657,6 +667,33 @@
   <script src="js/game-lib.js"></script>
   <script src="js/game-ai.js"></script>
   <script src="js/game-render.js"></script>
+  <script>
+    // Prevent overscroll/bounce and navigation gestures on mobile
+    function preventDefault(e) {
+      if (e.target.closest('.upgrade-panel, .career-panel, .job-board-panel, .how-to-play-panel, .remap-panel')) {
+        return;
+      }
+      if (e.touches && e.touches.length > 1) {
+        e.preventDefault(); // Prevent multi-touch zoom
+      }
+      // Only prevent if we're not touching a button
+      if (!e.target.closest('button, .mobile-btn, #joystickBase')) {
+        e.preventDefault();
+      }
+    }
+
+    document.addEventListener('touchstart', preventDefault, { passive: false });
+    document.addEventListener('touchmove', preventDefault, { passive: false });
+
+    // Disable context menu (long press) to avoid system interference
+    window.oncontextmenu = function (event) {
+      if (event.target.id === 'gameCanvas' || event.target.closest('#mobileControls')) {
+        event.preventDefault();
+        event.stopPropagation();
+        return false;
+      }
+    };
+  </script>
 </body>
 
 </html>
