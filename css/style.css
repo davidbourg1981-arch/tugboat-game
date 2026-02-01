@@ -2898,9 +2898,17 @@
         left: 0;
       }
 
-      canvas {
+      #gameCanvas {
         width: 100% !important;
         height: 100% !important;
         object-fit: contain;
+      }
+
+      .minimap {
+        width: 120px !important;
+        height: 100px !important;
+        transform: scale(0.6) !important;
+        transform-origin: top left !important;
+        pointer-events: none !important;
       }
     }

@@ -670,25 +670,12 @@
   <script>
     // Prevent overscroll/bounce and navigation gestures on mobile
     function preventDefault(e) {
-      // 1. Allow all interactions inside panels
-      if (e.target.closest('.upgrade-panel, .career-panel, .job-board-panel, .how-to-play-panel, .remap-panel, .difficulty-panel, .profile-panel, .options-panel')) {
-        return;
-      }
+      if (e.target.closest('button, .mobile-btn, #joystickBase, .difficulty-card, .menu-btn-small')) return;
 
-      // 2. Allow interactions with game UI elements and buttons
-      if (e.target.closest('button, .mobile-btn, #joystickBase, .difficulty-card, .menu-btn-small')) {
-        return;
-      }
+      if (e.target.closest('.upgrade-panel, .career-panel, .job-board-panel, .how-to-play-panel, .remap-panel, .difficulty-panel, .profile-panel, .options-panel')) return;
 
-      // 3. Block multi-touch zoom
-      if (e.touches && e.touches.length > 1) {
-        e.preventDefault();
-      }
-
-      // 4. Block screen dragging/panning on the game background itself
-      if (e.type === 'touchmove') {
-        e.preventDefault();
-      }
+      if (e.touches && e.touches.length > 1) e.preventDefault();
+      if (e.type === 'touchmove') e.preventDefault();
     }
 
     document.addEventListener('touchstart', preventDefault, { passive: false });
