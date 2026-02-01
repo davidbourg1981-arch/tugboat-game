@@ -1,4 +1,4 @@
-﻿    * {
+    * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -123,11 +123,11 @@
 
 
     body {
-      background: #0a1628;
+      background: #0a1628; position: fixed; width: 100%; touch-action: none;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      height: 100%;
       font-family: 'Segoe UI', system-ui, sans-serif;
       overflow: hidden;
     }
@@ -2860,3 +2860,6 @@
         font-size: 24px;
       }
     }
+
+
+@media (pointer: coarse) { .game-container { width: 100vw !important; height: 100vh !important; max-width: 100vw !important; max-height: 100vh !important; touch-action: none; } }
