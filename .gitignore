@@ -1,0 +1,12 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Brain/Session artifacts (Local to this environment)
+brain/
+.gemini/
+*.bak
+
+# Node (if any)
+node_modules/
+npm-debug.log
