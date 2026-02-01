@@ -560,14 +560,27 @@
       }
     }
 
-    .minimap {
+    #minimapWrapper {
       position: absolute;
       top: 10px;
       left: 10px;
+      width: 120px;
+      height: 70px;
+      /* Crop bottom 30% (land) */
+      overflow: hidden;
       border: 1px solid rgba(100, 180, 255, 0.4);
       border-radius: 4px;
       background: rgba(0, 20, 40, 0.8);
       z-index: 10;
+    }
+
+    .minimap {
+      display: block;
+      /* Canvas content stays full size, wrapper crops it */
+      max-width: none !important;
+      max-height: none !important;
+      width: 120px !important;
+      height: 100px !important;
     }
 
     /* Success/Fail Messages */
@@ -817,6 +830,11 @@
       .quest-panel {
         max-width: 150px;
         font-size: 0.85em;
+        /* Move to top-left to avoid joystick (bottom-left) and potential bottom-right buttons */
+        bottom: auto;
+        top: 80px;
+        /* Below minimap */
+        left: 10px;
       }
 
       .minimap {
@@ -2905,25 +2923,32 @@
       }
 
       /* Fix minimap scaling */
-      #minimap.minimap {
-        width: 120px !important;
-        height: 100px !important;
-        transform: scale(0.6) !important;
+      #minimapWrapper {
+        /* Scale up the cropped wrapper */
+        transform: scale(0.9) !important;
         transform-origin: top left !important;
         pointer-events: none !important;
         z-index: 20;
       }
 
-      /* Move buttons (Boats, Career, Licenses) to top-left area to avoid clashing with controls */
+      #minimap.minimap {
+        /* Reset canvas styles */
+        transform: none !important;
+        pointer-events: none !important;
+      }
+
+      /* Move buttons (Boats, Career, Licenses) to Mid-Right area (below Stats Panel) */
       .bottom-menu {
-        top: 75px !important;
-        /* Below minimap scale */
-        left: 10px !important;
-        right: auto !important;
+        top: 210px !important;
+        /* Below Stats Panel */
+        left: auto !important;
+        right: 10px !important;
         bottom: auto !important;
         flex-direction: column;
         gap: 4px;
         z-index: 30;
+        align-items: flex-end;
+        /* Align text to right */
       }
 
       .menu-btn-small {
