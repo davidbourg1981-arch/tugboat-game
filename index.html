@@ -13,7 +13,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#0a1628">
 
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=1.3">
 </head>
 
 <body>
@@ -166,7 +166,7 @@
     </div>
 
     <!-- Difficulty Selection Panel -->
-    <div class="difficulty-panel" id="difficultyPanel">
+    <div class="difficulty-panel panel" id="difficultyPanel">
       <button class="close-btn" onclick="closeDifficultySelect()">&times;</button>
       <h2><span class="icon icon-controller"></span> Select Difficulty</h2>
 
@@ -222,7 +222,7 @@
     </div>
 
     <!-- How to Play Panel -->
-    <div class="how-to-play-panel" id="howToPlayPanel">
+    <div class="how-to-play-panel panel" id="howToPlayPanel">
       <button class="close-btn" onclick="closeHowToPlay()">&times;</button>
       <h2>📖 How to Play</h2>
 
@@ -269,7 +269,7 @@
     </div>
 
     <!-- Options Panel -->
-    <div class="options-panel" id="optionsPanel">
+    <div class="options-panel panel" id="optionsPanel">
       <button class="close-btn" onclick="hideOptions()">&times;</button>
       <h2><span class="icon icon-settings"></span> Options</h2>
 
@@ -386,7 +386,7 @@
     </div>
 
     <!-- Key Remap Panel -->
-    <div class="remap-panel" id="remapPanel">
+    <div class="remap-panel panel" id="remapPanel">
       <button class="close-btn" onclick="closeRemapPanel()">&times;</button>
       <h2><span class="icon icon-keyboard"></span> Remap Controls</h2>
       <p class="remap-instructions">Click a button then press a key to remap</p>
@@ -438,7 +438,7 @@
     </div>
 
     <!-- Job Board Panel -->
-    <div class="job-board-panel" id="jobBoardPanel">
+    <div class="job-board-panel panel" id="jobBoardPanel">
       <h2>📋 Available Jobs</h2>
       <p class="job-board-subtitle">Choose a delivery job</p>
       <div class="job-board-list" id="jobBoardList"></div>
@@ -577,7 +577,7 @@
       <p id="messageText"></p>
     </div>
     <!-- License Shop Panel -->
-    <div class="upgrade-panel" id="licensePanel">
+    <div class="upgrade-panel panel" id="licensePanel">
       <button class="close-btn" onclick="closeLicenses()">&times;</button>
       <h2><span class="icon icon-star"></span> License Shop</h2>
       <p style="text-align:center; font-size:10px; color:#7aa8cc; margin-bottom:12px;">Unlock new abilities and cargo
@@ -586,14 +586,14 @@
     </div>
 
     <!-- Boat Shop Panel -->
-    <div class="upgrade-panel" id="boatShopPanel">
+    <div class="upgrade-panel panel" id="boatShopPanel">
       <button class="close-btn" onclick="closeBoatShop()">&times;</button>
       <h2><span class="icon icon-boat"></span> Boat Shop</h2>
       <div id="boatList"></div>
     </div>
 
     <!-- Career Panel -->
-    <div class="career-panel" id="careerPanel">
+    <div class="career-panel panel" id="careerPanel">
       <button class="close-btn" onclick="closeCareer()">&times;</button>
       <h2><span class="icon icon-trophy"></span> Career Progress</h2>
       <div class="career-stats">
@@ -635,7 +635,7 @@
   </div>
 
   <!-- Profile (Save Slots) Panel - Outside game container for proper z-index -->
-  <div class="profile-panel" id="profilePanel" aria-hidden="true">
+  <div class="profile-panel panel" id="profilePanel" aria-hidden="true">
     <button class="close-btn" onclick="hideProfiles()">&times;</button>
     <h2>&#x1F5C2; Profiles</h2>
     <div class="profile-hint">Controller: D-pad/Stick to move &bull; A select &bull; B back</div>
@@ -670,12 +670,20 @@
   <script>
     // Prevent overscroll/bounce and navigation gestures on mobile
     function preventDefault(e) {
-      if (e.target.closest('button, .mobile-btn, #joystickBase, .difficulty-card, .menu-btn-small')) return;
+      // 1. If we're interacting with a menu panel or UI button, allow standard behavior
+      if (e.target.closest('.panel, button, .mobile-btn, #joystickBase, .difficulty-card, .menu-btn-small')) {
+        return;
+      }
 
-      if (e.target.closest('.upgrade-panel, .career-panel, .job-board-panel, .how-to-play-panel, .remap-panel, .difficulty-panel, .profile-panel, .options-panel')) return;
+      // 2. Block multi-touch zoom globally
+      if (e.touches && e.touches.length > 1) {
+        e.preventDefault();
+      }
 
-      if (e.touches && e.touches.length > 1) e.preventDefault();
-      if (e.type === 'touchmove') e.preventDefault();
+      // 3. Block screen dragging ONLY on the game background (canvas)
+      if (e.type === 'touchmove') {
+        e.preventDefault();
+      }
     }
 
     document.addEventListener('touchstart', preventDefault, { passive: false });
