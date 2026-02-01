@@ -315,10 +315,16 @@ function applyAspectRatio() {
   canvas.width = aspect.width;
   canvas.height = aspect.height;
 
-  // Update container size (only if not fullscreen)
+  // Update container size (only if not fullscreen and not on mobile)
   if (!isFullscreen) {
-    container.style.width = aspect.width + 'px';
-    container.style.height = aspect.height + 'px';
+    const isMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    if (!isMobile) {
+      container.style.width = aspect.width + 'px';
+      container.style.height = aspect.height + 'px';
+    } else {
+      container.style.width = '100vw';
+      container.style.height = '100vh';
+    }
   }
 
   // Update button text
@@ -379,8 +385,15 @@ function handleFullscreenChange() {
   } else {
     // Restore normal size
     const aspect = ASPECT_RATIOS[currentAspect];
-    container.style.width = aspect.width + 'px';
-    container.style.height = aspect.height + 'px';
+    const isMobile = ('ontouchstart' in window || navigator.maxTouchPoints > 0);
+
+    if (!isMobile) {
+      container.style.width = aspect.width + 'px';
+      container.style.height = aspect.height + 'px';
+    } else {
+      container.style.width = '100vw';
+      container.style.height = '100vh';
+    }
     canvas.style.width = '';
     canvas.style.height = '';
 
@@ -4820,26 +4833,26 @@ function initMobileControls() {
   function handleJoystick(e) {
     if (!joystickActive) return;
     e.preventDefault();
-    
+
     const touch = e.touches ? e.touches[0] : e;
     const rect = base.getBoundingClientRect();
     const x = touch.clientX - rect.left - centerX;
     const y = touch.clientY - rect.top - centerY;
-    
+
     const dist = Math.hypot(x, y);
     const angle = Math.atan2(y, x);
     const clampedDist = Math.min(dist, maxRadius);
-    
+
     const knobX = Math.cos(angle) * clampedDist;
     const knobY = Math.sin(angle) * clampedDist;
-    
+
     knob.style.transform = `translate(calc(-50% + ${knobX}px), calc(-50% + ${knobY}px))`;
-    
+
     // Convert to thrust/turn
     // y is negative for forward (up)
     mobileThrust = - (y / maxRadius);
     mobileThrust = Math.max(-0.5, Math.min(1, mobileThrust));
-    
+
     mobileTurn = x / maxRadius;
     mobileTurn = Math.max(-1, Math.min(1, mobileTurn));
   }
